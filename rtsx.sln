@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2037
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rtsx", "rtsx\rtsx.csproj", "{47EA2D3B-89CC-4E8E-B231-C7E4F48A800E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47EA2D3B-89CC-4E8E-B231-C7E4F48A800E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47EA2D3B-89CC-4E8E-B231-C7E4F48A800E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47EA2D3B-89CC-4E8E-B231-C7E4F48A800E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47EA2D3B-89CC-4E8E-B231-C7E4F48A800E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {912E9BA2-0EBA-4333-B9EF-8EC0D0D02D28}
+	EndGlobalSection
+EndGlobal
