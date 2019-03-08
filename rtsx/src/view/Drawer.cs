@@ -2,7 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using rtsx.src.util;
 
-namespace rtsx.src.GUI
+namespace rtsx.src.view
 {
     class Drawer
     {

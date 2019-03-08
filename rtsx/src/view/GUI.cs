@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace rtsx.src.GUI
+namespace rtsx.src.view
 {
     static class GUI
     {
-        private static RTSXWindow Window;
+        public static RTSXWindow Window { get; private set; }
 
         private static ManualResetEventSlim WindowInitializedResetEvent;
 
@@ -22,12 +22,6 @@ namespace rtsx.src.GUI
 
             WindowInitializedResetEvent = new ManualResetEventSlim();
             WindowInitializedResetEvent.Wait();
-        }
-
-        public static void SetGetDrawablesCallback(
-            Func<IEnumerable<Drawable>> callback)
-        {
-            Window.GetDrawablesCallback = callback;
         }
 
         private static void RunWindow()

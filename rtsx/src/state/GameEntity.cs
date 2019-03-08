@@ -1,4 +1,4 @@
-﻿using rtsx.src.GUI;
+﻿using rtsx.src.view;
 using rtsx.src.util;
 using System;
 using System.Drawing;
@@ -7,12 +7,12 @@ namespace rtsx.src.state
 {
     class GameEntity : Drawable
     {
-        public Coordinate Location { get; private set; } = new Coordinate(0, 0);
-        public Coordinate Size { get; private set; } = new Coordinate(0.1, 0.1);
+        public Coordinate Location { get; protected set; } = new Coordinate(0, 0);
+        public Coordinate Size { get; protected set; } = new Coordinate(0.1, 0.1);
         public double X => Location.X;
         public double Y => Location.Y;
         public Coordinate MoveTo { get; set; }
-        public double MoveSpeed { get; private set; } = 0.01;
+        public double MoveSpeed { get; protected set; } = 0.01;
 
         public GameEntity()
         {
@@ -23,9 +23,10 @@ namespace rtsx.src.state
             Size = size;
         }
 
-        public void Draw(Drawer drawer)
+        public virtual void Draw(Drawer drawer)
         {
-            drawer.FillRectangle(Location, Location + Size, Color.Fuchsia);
+            var sizeHalved = Size * 0.5;
+            drawer.FillRectangle(Location - sizeHalved, Location + sizeHalved, Color.Fuchsia);
         }
 
         public void Step()
@@ -33,7 +34,7 @@ namespace rtsx.src.state
             Move();
         }
 
-        protected void Move()
+        protected virtual void Move()
         {
             if (MoveTo == null) { return; }
 

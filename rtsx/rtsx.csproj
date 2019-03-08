@@ -46,14 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\GUI\Drawable.cs" />
-    <Compile Include="src\GUI\Drawer.cs" />
-    <Compile Include="src\GUI\GUI.cs" />
-    <Compile Include="src\GUI\RTSXWindow.cs" />
+    <Compile Include="src\view\Drawable.cs" />
+    <Compile Include="src\view\Drawer.cs" />
+    <Compile Include="src\view\GUI.cs" />
+    <Compile Include="src\view\RTSXWindow.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\state\BoundingBox.cs" />
     <Compile Include="src\state\GameEntity.cs" />
     <Compile Include="src\state\GameState.cs" />
+    <Compile Include="src\state\MouseEntity.cs" />
     <Compile Include="src\util\Coordinate.cs" />
     <Compile Include="src\util\Logging.cs" />
   </ItemGroup>

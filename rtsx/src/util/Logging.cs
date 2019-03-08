@@ -12,5 +12,10 @@ namespace rtsx.src.util
         {
             Console.WriteLine(message);
         }
+
+        public static void Log(object o)
+        {
+            Log(o.ToString());
+        }
     }
 }

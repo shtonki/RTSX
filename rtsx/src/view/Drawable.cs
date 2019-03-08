@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace rtsx.src.GUI
+namespace rtsx.src.view
 {
     interface Drawable
     {

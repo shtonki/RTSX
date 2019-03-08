@@ -31,5 +31,18 @@ namespace rtsx.src.util
 
             return new Coordinate(newX, newY);
         }
+
+        public static Coordinate operator *(Coordinate A, double multiplier)
+        {
+            var newX = A.X * multiplier;
+            var newY = A.Y * multiplier;
+
+            return new Coordinate(newX, newY);
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{{ {0:N3} : {1:N3} }}", X, Y);
+        }
     }
 }
