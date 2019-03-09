@@ -49,6 +49,7 @@
     <Compile Include="src\view\Drawable.cs" />
     <Compile Include="src\view\Drawer.cs" />
     <Compile Include="src\view\GUI.cs" />
+    <Compile Include="src\view\ImageLoader.cs" />
     <Compile Include="src\view\RTSXWindow.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -22,5 +22,29 @@ namespace rtsx.src.view
 
             GL.End();
         }
+
+        public void drawTextureR(TextureBinding textureBinding, Coordinate origin,
+            Coordinate end, Color color)
+        {
+            GL.Enable(EnableCap.Texture2D);
+            GL.Color4(color);
+            GL.BindTexture(TextureTarget.Texture2D, textureBinding.GLTextureId);
+            GL.Begin(PrimitiveType.Quads);
+
+            GL.TexCoord2(0, 1);
+            GL.Vertex2(origin.X, origin.Y);
+
+            GL.TexCoord2(1, 1);
+            GL.Vertex2(end.X, origin.Y);
+
+            GL.TexCoord2(1, 0);
+            GL.Vertex2(end.X, end.Y);
+
+            GL.TexCoord2(0, 0);
+            GL.Vertex2(origin.X, end.Y);
+
+            GL.End();
+            GL.Disable(EnableCap.Texture2D);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -23,6 +24,8 @@ namespace rtsx.src.view
             WindowInitializedResetEvent = new ManualResetEventSlim();
             WindowInitializedResetEvent.Wait();
         }
+
+        public static TextureBinding A;
 
         private static void RunWindow()
         {

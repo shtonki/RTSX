@@ -26,7 +26,9 @@ namespace rtsx.src.state
         public virtual void Draw(Drawer drawer)
         {
             var sizeHalved = Size * 0.5;
-            drawer.FillRectangle(Location - sizeHalved, Location + sizeHalved, Color.Fuchsia);
+            //drawer.FillRectangle(Location - sizeHalved, Location + sizeHalved, Color.Fuchsia);
+            drawer.drawTextureR(GUI.A, Location - sizeHalved, 
+                Location + sizeHalved, Color.White);
         }
 
         public void Step()
