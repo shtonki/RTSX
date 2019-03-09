@@ -14,21 +14,22 @@ namespace rtsx.src.state
         public Coordinate MoveTo { get; set; }
         public double MoveSpeed { get; protected set; } = 0.01;
 
-        public GameEntity()
-        {
-        }
+        private BoundingBox BoundingBox { get; }
 
         public GameEntity(Coordinate size)
         {
             Size = size;
+            BoundingBox = new BoundingBox(Size.Clone());
         }
+
+        public bool DBG;
 
         public virtual void Draw(Drawer drawer)
         {
             var sizeHalved = Size * 0.5;
             //drawer.FillRectangle(Location - sizeHalved, Location + sizeHalved, Color.Fuchsia);
             drawer.drawTextureR(GUI.A, Location - sizeHalved, 
-                Location + sizeHalved, Color.White);
+                Location + sizeHalved, DBG ? Color.White : Color.Black);
         }
 
         public void Step()
@@ -59,6 +60,24 @@ namespace rtsx.src.state
             }
 
             Location += movementCoordinate;
+        }
+
+        public static CollisionResult CheckCollision(GameEntity A, GameEntity B)
+        {
+            if (A.BoundingBox == null || B.BoundingBox == null)
+            {
+                return CollisionResult.NoCollision;
+            }
+
+            var xDistance = Math.Abs(A.X - B.X);
+            var yDistance = Math.Abs(A.Y - B.Y);
+
+            var totalBoundingBoxSize = A.BoundingBox.Size + B.BoundingBox.Size;
+
+            var xOverlap = xDistance < totalBoundingBoxSize.X / 2;
+            var yOverlap = yDistance < totalBoundingBoxSize.Y / 2;
+
+            return new CollisionResult(xOverlap && yOverlap);
         }
     }
 }

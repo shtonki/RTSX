@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 namespace rtsx.src.util
 {
@@ -40,9 +39,22 @@ namespace rtsx.src.util
             return new Coordinate(newX, newY);
         }
 
+        public static Coordinate operator /(Coordinate A, double divisor)
+        {
+            var newX = A.X / divisor;
+            var newY = A.Y / divisor;
+
+            return new Coordinate(newX, newY);
+        }
+
         public override string ToString()
         {
             return String.Format("{{ {0:N3} : {1:N3} }}", X, Y);
+        }
+
+        public Coordinate Clone()
+        {
+            return new Coordinate(X, Y);
         }
     }
 }

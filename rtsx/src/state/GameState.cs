@@ -10,13 +10,12 @@ namespace rtsx.src.state
         public IEnumerable<GameEntity> Entities => EntityList;
 
         private Timer StepTimer;
-        /// <summary> In milliseconds </summary>
-        private const double StepInterval = 10;
+        private const double StepsPerSecond = 100;
 
         public GameState()
         {
             StepTimer = new Timer();
-            StepTimer.Interval = StepInterval;
+            StepTimer.Interval = StepsPerSecond/60;
             StepTimer.Elapsed += (_, __) => Step();
             StepTimer.Start();
         }
@@ -37,6 +36,20 @@ namespace rtsx.src.state
             foreach (var entity in Entities)
             {
                 entity.Step();
+            }
+
+            for (int i = 0; i < EntityList.Count; i++)
+            {
+                var entityI = EntityList[i];
+                for (int j = i + 1; j < EntityList.Count; j++)
+                {
+                    var entityJ = EntityList[j];
+
+                    var collisionResult = GameEntity.CheckCollision(entityI, entityJ);
+
+                    entityI.DBG = collisionResult.CollisionOccured;
+                    entityJ.DBG = collisionResult.CollisionOccured;
+                }
             }
         }
     }

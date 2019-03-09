@@ -59,7 +59,6 @@ namespace rtsx.src.view
             yval = -yval;
 
             MousePosition = new Coordinate(xval, yval);
-            Logging.Log(MousePosition);
         }
 
         protected override void OnResize(EventArgs e)
