@@ -17,9 +17,6 @@ namespace rtsx
             ge.MoveTo = new Coordinate(-0.5, -0.5);
             gs.AddEntity(ge);
 
-            var me = new MouseEntity();
-            gs.AddEntity(me);
-
             GUI.Window.DrawablesCallback = () => gs.Entities;
         }
     }

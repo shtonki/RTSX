@@ -6,16 +6,35 @@ using System.Threading.Tasks;
 
 namespace rtsx.src.util
 {
+    interface Loggable
+    {
+        string Log();
+    }
+
     static class Logging
     {
-        public static void Log(string message)
+        static long startTick;
+
+        static Logging()
         {
-            Console.WriteLine(message);
+            startTick = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        }
+
+        private static void LogRaw(string message)
+        {
+            long currentTick = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTick;
+
+            Console.WriteLine(currentTick + ": " + message);
+        }
+
+        public static void Log(Loggable l)
+        {
+            LogRaw(l.Log());
         }
 
         public static void Log(object o)
         {
-            Log(o.ToString());
+            LogRaw(o.ToString());
         }
     }
 }
