@@ -48,7 +48,9 @@ namespace rtsx.src.view
 
         public void HandleInput(RTSXInput input)
         {
-            Logging.Log(InputToActionMap.GetMapping(input).Action);
+            var action = InputToActionMap.GetMapping(input);
+            Logging.Log(action.Action);
+            GameState.HandleAction(action);
         }
 
         public void Render(Drawer drawer)

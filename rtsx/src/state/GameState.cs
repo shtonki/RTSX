@@ -73,6 +73,45 @@ namespace rtsx.src.state
             }
         }
 
+        public void HandleAction(GameAction action)
+        {
+            switch (action.Action)
+            {
+                case GameActions.SelectEnd:
+                    {
+                        SelectEntities(MouseEntity.MouseStateInfo.Picked);
+                    } break;
 
+                case GameActions.RouteTo:
+                    {
+                        RouteTo(MouseEntity.Location.Clone());
+                    } break;
+            }
+        }
+
+        private void SelectEntities(IEnumerable<GameEntity> entities)
+        {
+            foreach (var v in Selected)
+            {
+                v.BrushColour = Color.White;
+            }
+
+            Selected.Clear();
+
+            foreach (var v in entities)
+            {
+                v.BrushColour = Color.Green;
+                Selected.Add(v);
+            }
+        }
+
+        private void RouteTo(Coordinate destination)
+        {
+            Logging.Log(destination);
+            foreach (var v in Selected)
+            {
+                v.MoveTo = destination;
+            }
+        }
     }
 }
