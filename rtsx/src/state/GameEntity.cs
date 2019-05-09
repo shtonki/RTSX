@@ -13,7 +13,8 @@ namespace rtsx.src.state
         public Coordinate Size { get; protected set; } = new Coordinate(0.1, 0.1);
 
         public Coordinate MoveTo { get; set; }
-        public double MoveSpeed { get; protected set; } = 0.01;
+        public GameEntity Following { get; set; }
+        public double MoveSpeed { get; set; } = 0.01;
 
         private BoundingBox BoundingBox { get; }
 
@@ -43,6 +44,11 @@ namespace rtsx.src.state
 
         protected virtual void Move()
         {
+            if (Following != null)
+            {
+                MoveTo = Following.Location;
+            }
+
             if (MoveTo == null) { return; }
 
             var diff = MoveTo - Location;

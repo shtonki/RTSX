@@ -17,6 +17,10 @@ namespace rtsx
             ge.MoveTo = new Coordinate(-0.5, -0.3);
             gs.AddEntity(ge);
 
+            ge = new GameEntity(new Coordinate(0.1, 0.1));
+            ge.MoveSpeed = 0.002;
+            gs.AddEntity(ge);
+
             Scene scene = new GameScene(gs);
 
             GUI.Window.Scene = scene;

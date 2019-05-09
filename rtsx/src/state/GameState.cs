@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Timers;
+using System.Linq;
 
 namespace rtsx.src.state
 {
@@ -12,6 +13,7 @@ namespace rtsx.src.state
         private List<GameEntity> Selected = new List<GameEntity>();
 
         public MouseEntity MouseEntity { get; } = new MouseEntity();
+        private MouseStateInfo MSI => MouseEntity.MouseStateInfo;
 
         private Timer StepTimer;
         private const double StepsPerSecond = 100;
@@ -84,7 +86,20 @@ namespace rtsx.src.state
 
                 case GameActions.RouteTo:
                     {
-                        RouteTo(MouseEntity.Location.Clone());
+                        var paranoidCopy = MSI.Picked.ToList();
+
+                        if (paranoidCopy.Count == 0)
+                        {
+                            RouteTo(MouseEntity.Location);
+                        }
+                        else if (paranoidCopy.Count == 1)
+                        {
+                            Follow(paranoidCopy[0]);
+                        }
+                        else
+                        {
+                            throw new RTSXException();
+                        }
                     } break;
             }
         }
@@ -107,10 +122,18 @@ namespace rtsx.src.state
 
         private void RouteTo(Coordinate destination)
         {
-            Logging.Log(destination);
             foreach (var v in Selected)
             {
+                v.Following = null;
                 v.MoveTo = destination;
+            }
+        }
+
+        private void Follow(GameEntity followed)
+        {
+            foreach (var v in Selected)
+            {
+                v.Following = followed;
             }
         }
     }
