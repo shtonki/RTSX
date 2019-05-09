@@ -9,6 +9,7 @@ namespace rtsx.src.state
     {
         private List<GameEntity> EntityList { get; } = new List<GameEntity>();
         public IEnumerable<GameEntity> Entities => EntityList;
+        private List<GameEntity> Selected = new List<GameEntity>();
 
         public MouseEntity MouseEntity { get; } = new MouseEntity();
 
@@ -50,25 +51,6 @@ namespace rtsx.src.state
             }
 
             DetectCollisions();
-
-            HandleMouseState();
-        }
-
-        private void HandleMouseState()
-        {
-            var MouseStateInfo = MouseEntity.MouseStateInfo;
-
-            if (MouseStateInfo == null) { return; }
-
-            foreach (var e in MouseStateInfo.Entered)
-            {
-                e.BrushColour = Color.Fuchsia;
-            }
-
-            foreach (var e in MouseStateInfo.Left)
-            {
-                e.BrushColour = Color.White;
-            }
         }
 
         private void DetectCollisions()
@@ -90,5 +72,7 @@ namespace rtsx.src.state
                 }
             }
         }
+
+
     }
 }

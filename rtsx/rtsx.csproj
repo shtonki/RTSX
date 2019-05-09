@@ -47,11 +47,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\state\Collision.cs" />
+    <Compile Include="src\state\GameAction.cs" />
     <Compile Include="src\util\RTSXException.cs" />
     <Compile Include="src\view\Drawable.cs" />
     <Compile Include="src\view\Drawer.cs" />
     <Compile Include="src\view\GUI.cs" />
     <Compile Include="src\view\ImageLoader.cs" />
+    <Compile Include="src\view\RTSXInput.cs" />
     <Compile Include="src\view\RTSXWindow.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="src\state\MouseEntity.cs" />
     <Compile Include="src\util\Coordinate.cs" />
     <Compile Include="src\util\Logging.cs" />
+    <Compile Include="src\view\Scene.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

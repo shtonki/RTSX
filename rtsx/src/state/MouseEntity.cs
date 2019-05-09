@@ -24,14 +24,21 @@ namespace rtsx.src.state
 
     class MouseEntity : GameEntity
     {
+        private const double MouseSize = 0.0005;
+
         private List<GameEntity> Previous = new List<GameEntity>(); 
         private List<GameEntity> Current = new List<GameEntity>(); 
 
         public MouseStateInfo MouseStateInfo { get; private set; }
 
-        public MouseEntity() : base(new Coordinate(0.2, 0.2))
+        public MouseEntity() : base(new Coordinate(MouseSize, MouseSize))
         {
             
+        }
+
+        public override void Draw(Drawer drawer)
+        {
+            // todo
         }
 
         protected override void Move()

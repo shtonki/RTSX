@@ -17,7 +17,7 @@ namespace rtsx.src.view
 
         public Coordinate MousePosition { get; private set; } = new Coordinate(0, 0);
 
-        public Func<IEnumerable<Drawable>> DrawablesCallback { get; set; }
+        public Scene Scene;
 
         public RTSXWindow() : base(WindowHeight, WindowHeight, new GraphicsMode(32, 24, 0, 32), "title here eh")
         {
@@ -67,19 +67,23 @@ namespace rtsx.src.view
             GL.Viewport(0, 0, Width, Height);
         }
 
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+            Scene?.HandleInput(new MouseInput(MouseInput.MouseDirection.Down, e.Button));
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+            Scene?.HandleInput(new MouseInput(MouseInput.MouseDirection.Up, e.Button));
+        }
+
         private void Render()
         {
-            var drawer = new Drawer();
+            if (Scene == null) { return; }
 
-            if (DrawablesCallback != null)
-            {
-                var drawables = DrawablesCallback();
-
-                foreach (var drawable in drawables)
-                {
-                    drawable.Draw(drawer);
-                }
-            }
+            Scene.Render(new Drawer());
         }
 
     }

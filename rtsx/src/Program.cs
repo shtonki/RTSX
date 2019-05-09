@@ -17,7 +17,10 @@ namespace rtsx
             ge.MoveTo = new Coordinate(-0.5, -0.5);
             gs.AddEntity(ge);
 
-            GUI.Window.DrawablesCallback = () => gs.Entities;
+            Scene scene = new GameScene(gs);
+
+            GUI.Window.Scene = scene;
+
         }
     }
 }

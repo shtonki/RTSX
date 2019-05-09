@@ -17,6 +17,9 @@ namespace rtsx.src.state
 
         private BoundingBox BoundingBox { get; }
 
+        public bool Hovered { get; set; }
+        public bool Selected { get; set; }
+
         public Color BrushColour { get; set; } = Color.White;
 
         public GameEntity(Coordinate size)
