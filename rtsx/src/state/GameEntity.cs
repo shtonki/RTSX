@@ -57,8 +57,8 @@ namespace rtsx.src.state
             }
             else
             {
-                var xMovement = MoveSpeed * Math.Sin(angle);
-                var yMovement = MoveSpeed * Math.Cos(angle);
+                var xMovement = MoveSpeed * Math.Cos(angle);
+                var yMovement = MoveSpeed * Math.Sin(angle);
 
                 movementCoordinate = new Coordinate(xMovement, yMovement);
             }

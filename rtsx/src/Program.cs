@@ -14,7 +14,7 @@ namespace rtsx
             GameState gs = new GameState();
 
             var ge = new GameEntity(new Coordinate(0.1, 0.1));
-            ge.MoveTo = new Coordinate(-0.5, -0.5);
+            ge.MoveTo = new Coordinate(-0.5, -0.3);
             gs.AddEntity(ge);
 
             Scene scene = new GameScene(gs);
