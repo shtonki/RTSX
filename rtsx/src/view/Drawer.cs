@@ -23,6 +23,31 @@ namespace rtsx.src.view
             GL.End();
         }
 
+        public void DrawRectangle(Coordinate start, Coordinate end, Color color, float thickness)
+        {
+            GL.Color3(color);
+            GL.LineWidth(thickness);
+#pragma warning disable CS0618 
+            // One mans "deprecated" is another mans "basis for a framework"
+            GL.Begin(BeginMode.Lines);
+#pragma warning restore CS0618 
+
+            GL.Vertex2(start.X, start.Y);
+            GL.Vertex2(start.X, end.Y);
+
+            GL.Vertex2(start.X, end.Y);
+            GL.Vertex2(end.X, end.Y);
+
+            GL.Vertex2(end.X, end.Y);
+            GL.Vertex2(end.X, start.Y);
+
+            GL.Vertex2(end.X, start.Y);
+            GL.Vertex2(start.X, start.Y);
+
+            GL.End();
+        }
+
+
         public void drawTextureR(TextureBinding textureBinding, Coordinate origin,
             Coordinate end, Color color)
         {

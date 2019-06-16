@@ -5,8 +5,10 @@ using System.Drawing;
 
 namespace rtsx.src.state
 {
-    class GameEntity : Drawable, Loggable
+    abstract class GameEntity : Drawable, Loggable
     {
+        public const double GridSize = 0.025;
+
         public Coordinate Location { get; set; } = new Coordinate(0, 0);
         public double X => Location.X;
         public double Y => Location.Y;
@@ -17,19 +19,16 @@ namespace rtsx.src.state
             get { return Location.X - Size.X / 2; }
             set { Location = new Coordinate(value + Size.X / 2, Location.Y); }
         }
-
         public double RightBounds
         {
             get { return Location.X + Size.X / 2; }
             set { Location = new Coordinate(value - Size.X / 2, Location.Y); }
         }
-
         public double TopBounds
         {
             get { return Location.Y - Size.Y / 2; }
             set { Location = new Coordinate(Location.X, value + Size.Y / 2); }
         }
-
         public double BottomBounds
         {
             get { return Location.Y + Size.Y / 2; }
@@ -42,12 +41,11 @@ namespace rtsx.src.state
         public double MoveSpeed { get; set; } = 0.004;
 
         private BoundingBox BoundingBox { get; }
-        public bool Collidable { get; protected set; } = true;
+        public bool Collidable { get; protected set; }
 
-        public bool Hovered { get; set; }
         public bool Selected { get; set; }
 
-        public Color BrushColour { get; set; } = Color.White;
+        public Color BrushColour { get; private set; } = Color.White;
 
         public GameEntity(Coordinate size)
         {

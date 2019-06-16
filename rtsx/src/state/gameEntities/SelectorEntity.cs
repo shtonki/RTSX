@@ -13,9 +13,7 @@ namespace rtsx.src.state.gameEntities
     {
         public SelectorStart() : base(new Coordinate(0, 0))
         {
-            Collidable = false;
         }
-
     }
 
     class SelectorEnd : GameEntity
@@ -24,13 +22,12 @@ namespace rtsx.src.state.gameEntities
 
         public SelectorEnd(SelectorStart start) : base(new Coordinate(0, 0))
         {
-            Collidable = false;
             Start = start;
         }
 
         public override void Draw(Drawer drawer)
         {
-            drawer.FillRectangle(Start.Location, this.Location, Color.Black);
+            drawer.DrawRectangle(Start.Location, this.Location, Color.Black, 2);
         }
     }
 
@@ -38,7 +35,6 @@ namespace rtsx.src.state.gameEntities
     {
         public SelectorEntity(SelectorStart start, SelectorEnd end) : base(CalculateSize(start.Location, end.Location))
         {
-            Collidable = false;
             Location = CalculateLocation(start.Location, end.Location);
         }
 

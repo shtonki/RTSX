@@ -173,14 +173,14 @@ namespace rtsx.src.state
             
             foreach (var v in Selected)
             {
-                v.BrushColour = Color.White;
+                v.Selected = false;
             }
 
             Selected.Clear();
 
             foreach (var v in entitiesCopy)
             {
-                v.BrushColour = Color.Green;
+                v.Selected = true;
                 Selected.Add(v);
             }
         }

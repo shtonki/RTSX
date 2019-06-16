@@ -33,7 +33,6 @@ namespace rtsx.src.state
 
         public MouseEntity() : base(new Coordinate(MouseSize, MouseSize))
         {
-            Collidable = false;
         }
 
         public override void Draw(Drawer drawer)

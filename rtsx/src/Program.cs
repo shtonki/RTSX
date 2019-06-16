@@ -2,6 +2,7 @@
 using rtsx.src.view;
 using rtsx.src.state;
 using rtsx.src.util;
+using rtsx.src.state.gameEntities;
 
 namespace rtsx
 {
@@ -13,12 +14,11 @@ namespace rtsx
 
             GameState gs = new GameState();
 
-            var ge = new GameEntity(new Coordinate(0.1, 0.1));
-            ge.MoveTo = new Coordinate(-0.5, -0.3);
+            var ge = new DummyUnit();
             ge.Location = new Coordinate(0.5, 0.5);
             gs.AddEntity(ge);
 
-            ge = new GameEntity(new Coordinate(0.1, 0.1));
+            ge = new DummyUnit();
             ge.MoveSpeed = 0.002;
             gs.AddEntity(ge);
 
