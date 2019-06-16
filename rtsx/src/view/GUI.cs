@@ -25,8 +25,6 @@ namespace rtsx.src.view
             WindowInitializedResetEvent.Wait();
         }
 
-        public static TextureBinding A;
-
         private static void RunWindow()
         {
             Window = new RTSXWindow();

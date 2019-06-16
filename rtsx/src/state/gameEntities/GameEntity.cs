@@ -45,6 +45,7 @@ namespace rtsx.src.state
 
         public bool Selected { get; set; }
 
+        public Sprites Sprite = Sprites.Hellspawn;
         public Color BrushColour { get; private set; } = Color.White;
 
         public GameEntity(Coordinate size)
@@ -56,7 +57,7 @@ namespace rtsx.src.state
         public virtual void Draw(Drawer drawer)
         {
             var sizeHalved = Size * 0.5;
-            drawer.drawTextureR(GUI.A, Location - sizeHalved, 
+            drawer.DrawTexture(Sprite, Location - sizeHalved, 
                 Location + sizeHalved, BrushColour);
         }
 

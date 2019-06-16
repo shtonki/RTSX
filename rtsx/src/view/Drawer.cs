@@ -47,12 +47,16 @@ namespace rtsx.src.view
             GL.End();
         }
 
+        public void DrawTexture(Sprites sprite, Coordinate origin, Coordinate end, Color colour)
+        {
+            DrawTextureR(ImageLoader.GetBinding(sprite), origin, end, colour);
+        }
 
-        public void drawTextureR(TextureBinding textureBinding, Coordinate origin,
-            Coordinate end, Color color)
+        private void DrawTextureR(TextureBinding textureBinding, Coordinate origin,
+            Coordinate end, Color colour)
         {
             GL.Enable(EnableCap.Texture2D);
-            GL.Color4(color);
+            GL.Color4(colour);
             GL.BindTexture(TextureTarget.Texture2D, textureBinding.GLTextureId);
             GL.Begin(PrimitiveType.Quads);
 

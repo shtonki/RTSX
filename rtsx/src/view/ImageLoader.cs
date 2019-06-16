@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 
 using OpenTK.Graphics.OpenGL;
@@ -16,9 +17,38 @@ namespace rtsx.src.view
         }
     }
 
+    public enum Sprites
+    {
+        Hellspawn,
+
+        Warrior,
+    }
+
     static class ImageLoader
     {
-        public static TextureBinding BindTexture(Image image)
+        private static Dictionary<Sprites, TextureBinding> LoadedTextures = new Dictionary<Sprites, TextureBinding>();
+
+        private static Dictionary<Sprites, Image> ImageDictionary;
+
+        public static void LoadTextures()
+        {
+            ImageDictionary = new Dictionary<Sprites, Image>();
+
+            ImageDictionary[Sprites.Hellspawn] = Properties.Resources.hellspawn;
+            ImageDictionary[Sprites.Warrior] = Properties.Resources.soldier;
+        }
+
+        public static TextureBinding GetBinding(Sprites sprite)
+        {
+            if (!LoadedTextures.ContainsKey(sprite))
+            {
+                LoadedTextures[sprite] = BindTexture(ImageDictionary[sprite]);
+            }
+
+            return LoadedTextures[sprite];
+        }
+
+        private static TextureBinding BindTexture(Image image)
         {
             var glId = MakeTexture(image);
 

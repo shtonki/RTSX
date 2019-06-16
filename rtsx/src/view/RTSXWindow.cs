@@ -8,6 +8,7 @@ using OpenTK.Input;
 using rtsx.src.util;
 using OpenTK.Graphics;
 
+
 namespace rtsx.src.view
 {
     class RTSXWindow : GameWindow
@@ -22,14 +23,14 @@ namespace rtsx.src.view
         public RTSXWindow() : base(WindowHeight, WindowHeight, new GraphicsMode(32, 24, 0, 32), "title here eh")
         {
             GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            Image i = Image.FromFile("C:/Users/Daniel/Pictures/a.png");
-            GUI.A = ImageLoader.BindTexture(i);
+            ImageLoader.LoadTextures();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

@@ -25,9 +25,12 @@ namespace rtsx.src.state.gameEntities
         {
             var sizeHalved = Size * 0.5;
             drawer.DrawRectangle(Location - sizeHalved, Location + sizeHalved, Selected ? Color.Green : Color.White, 3);
-            drawer.FillRectangle(Location - sizeHalved, Location + sizeHalved, BackgroundColour);
-        }
 
+            var backSize = sizeHalved * 0.7;
+            drawer.FillRectangle(Location - backSize, Location + backSize, BackgroundColour);
+
+            base.Draw(drawer);
+        }
         private static Coordinate CalculateSize(UnitSize size)
         {
             int multiplier;
@@ -50,7 +53,7 @@ namespace rtsx.src.state.gameEntities
     {
         public DummyUnit() : base(UnitSize.Medium, Color.Pink)
         {
-
+            Sprite = Sprites.Warrior;
         }
     }
 }
