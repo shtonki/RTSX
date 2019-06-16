@@ -63,6 +63,16 @@ namespace rtsx.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap bow {
+            get {
+                object obj = ResourceManager.GetObject("bow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap hellspawn {
             get {
                 object obj = ResourceManager.GetObject("hellspawn", resourceCulture);

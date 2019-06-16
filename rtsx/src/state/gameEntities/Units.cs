@@ -13,8 +13,8 @@ namespace rtsx.src.state.gameEntities
     {
         public enum Statii { Normal, Attacking, }
 
-        private const double MoveSpeedMultiplier = 0.0007;
-        private const double BaseAttackTime = 100;
+        private const double MoveSpeedMultiplier = 0.0004;
+        private const double BaseAttackTime = 70;
         private const double DamagePoint = 0.5;
 
         public Player Owner { get; }
@@ -22,10 +22,23 @@ namespace rtsx.src.state.gameEntities
         public Statii Status { get; protected set; } = Statii.Normal;
         public Attributes Attributes { get; protected set; }
 
+        public bool IsAlive => Attributes.CurrentHealth > 0;
+
         private double AttackCounter;
         private bool InBackswing;
         private Unit Attacking;
-        public bool CanAttack => Attributes.AttackRange != null;
+        public bool CanBeAttacked => IsAlive;
+        public bool CanAttack(GameEntity other)
+        {
+            if (!(other is Unit))
+            { return false; }
+
+            var unit = other as Unit;
+
+            return this.IsAlive && 
+                unit.IsAlive && 
+                unit.Owner != this.Owner;
+        }
 
         public Unit(EntitySize size, Player owner) : base(size)
         {
@@ -50,7 +63,9 @@ namespace rtsx.src.state.gameEntities
             {
                 var swingPercentage = AttackCounter / BaseAttackTime;
                 var backSize = sizeHalved * swingPercentage;
-                drawer.FillRectangle(Location - backSize, Location + backSize, Color.Transparent);
+                var start = Location - sizeHalved;
+                var end = new Coordinate(start.X - 0.01, start.Y + swingPercentage * Size.Y);
+                drawer.FillRectangle(start, end, Color.Crimson);
             }
 
             base.Draw(drawer);
@@ -74,7 +89,9 @@ namespace rtsx.src.state.gameEntities
         protected override Coordinate DetermineMovement()
         {
             // if we want to attack and can attack we begin attacking
-            if (Following != null && CanAttack && Following is Unit &&  DistanceTo(Following) < Attributes.AttackRange)
+            if (Following != null && 
+                CanAttack(Following) &&
+                DistanceTo(Following) < Attributes.AttackRange)
             {
                 Status = Statii.Attacking;
                 Attacking = Following as Unit;
@@ -86,7 +103,7 @@ namespace rtsx.src.state.gameEntities
             }
             if (Status == Statii.Attacking)
             {
-                AttackCounter++;
+                AttackCounter += Attributes.AttackSpeed;
 
                 // check for damage point
                 if (!InBackswing && AttackCounter > BaseAttackTime * DamagePoint)
@@ -111,13 +128,23 @@ namespace rtsx.src.state.gameEntities
         }
     }
 
-    class DummyUnit : Unit
+    class Warrior : Unit
     {
-        public DummyUnit(Player owner) : base(EntitySize.Medium, owner)
+        public Warrior(Player owner) : base(EntitySize.Medium, owner)
         {
-            Attributes = new Attributes(100, 10, 0.01, 10);
+            Attributes = new Attributes(100, 10, 0.03, 12, 1);
 
             Sprite = Sprites.Warrior;
+        }
+    }
+
+    class Ranger : Unit
+    {
+        public Ranger(Player owner) : base(EntitySize.Medium, owner)
+        {
+            Attributes = new Attributes(70, 15, 0.45, 8, 1.5);
+
+            Sprite = Sprites.Ranger;
         }
     }
 

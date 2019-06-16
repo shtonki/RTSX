@@ -15,14 +15,16 @@ namespace rtsx.src.state
 
         public FloatStat AttackRange { get; }
         public FloatStat AttackDamage { get; }
+        public FloatStat AttackSpeed { get; }
 
         public Attributes(double maxHealth, 
             double movementSpeed, 
-            double attackRange, double attackDamage)
+            double attackRange, double attackDamage, double attackSpeed)
             : this(maxHealth, movementSpeed)
         {
             AttackRange = new FloatStat(attackRange);
             AttackDamage = new FloatStat(attackDamage);
+            AttackSpeed = new FloatStat(attackSpeed);
         }
 
         public Attributes(double maxHealth, 
@@ -57,6 +59,11 @@ namespace rtsx.src.state
         public void Modify(double value)
         {
             Modifier += value;
+        }
+
+        public void ModifyPercentage(double value)
+        {
+            Modifier += this * value * 0.01;
         }
 
         public void SetTo(double Value)

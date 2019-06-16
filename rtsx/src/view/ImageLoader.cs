@@ -22,6 +22,7 @@ namespace rtsx.src.view
         Hellspawn,
 
         Warrior,
+        Ranger,
 
         Tree,
     }
@@ -38,6 +39,7 @@ namespace rtsx.src.view
 
             ImageDictionary[Sprites.Hellspawn] = Properties.Resources.hellspawn;
             ImageDictionary[Sprites.Warrior] = Properties.Resources.soldier;
+            ImageDictionary[Sprites.Ranger] = Properties.Resources.bow;
             ImageDictionary[Sprites.Tree] = Properties.Resources.tree;
         }
 
