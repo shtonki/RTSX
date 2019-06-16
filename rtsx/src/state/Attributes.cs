@@ -13,10 +13,27 @@ namespace rtsx.src.state
         public FloatStat MaxHealth { get; }
         public FloatStat CurrentHealth { get; }
 
-        public Attributes(double maxHealth, double movementSpeed)
+        public FloatStat AttackRange { get; }
+        public FloatStat AttackDamage { get; }
+
+        public Attributes(double maxHealth, 
+            double movementSpeed, 
+            double attackRange, double attackDamage)
+            : this(maxHealth, movementSpeed)
+        {
+            AttackRange = new FloatStat(attackRange);
+            AttackDamage = new FloatStat(attackDamage);
+        }
+
+        public Attributes(double maxHealth, 
+            double movementSpeed)
+            : this(maxHealth)
         {
             MovementSpeed = new FloatStat(movementSpeed);
+        }
 
+        public Attributes(double maxHealth)
+        {
             MaxHealth = new FloatStat(maxHealth);
             CurrentHealth = new FloatStat(maxHealth);
         }
@@ -24,13 +41,27 @@ namespace rtsx.src.state
 
     class FloatStat
     {
-        public double Value => BaseValue;
+        public static implicit operator double(FloatStat stat)
+        {
+            return stat.BaseValue + stat.Modifier;
+        }
 
-        public double BaseValue { get; set; }
+        private double BaseValue { get; set; }
+        private double Modifier { get; set; }
 
         public FloatStat(double baseValue)
         {
             BaseValue = baseValue;
+        }
+
+        public void Modify(double value)
+        {
+            Modifier += value;
+        }
+
+        public void SetTo(double Value)
+        {
+            Modifier = Value - BaseValue;
         }
     }
 }

@@ -62,6 +62,12 @@ namespace rtsx.src.state
 
         }
 
+        public double DistanceTo(GameEntity other)
+        {
+            var distance = (Location - other.Location).Abs;
+            return distance - BoundingBox.Size.X / 2 - other.BoundingBox.Size.X / 2;
+        }
+
         public virtual void Draw(Drawer drawer)
         {
             var sizeHalved = Size * 0.5;
@@ -77,14 +83,14 @@ namespace rtsx.src.state
 
         protected virtual Coordinate DetermineMovement()
         {
-            if (MoveTo == null)
-            {
-                return Coordinate.ZeroVector;
-            }
-
             if (Following != null)
             {
                 MoveTo = Following.Location;
+            }
+
+            if (MoveTo == null)
+            {
+                return Coordinate.ZeroVector;
             }
 
             var diff = MoveTo - Location;
@@ -117,7 +123,19 @@ namespace rtsx.src.state
                 var myNewLocation = collisionInfo.Self == collisionResult.A ? 
                     collisionResult.NewLocationA : collisionResult.NewLocationB;
                 Location = myNewLocation;
+                Logging.Log("Collision placed me at " + Location);
             }
+        }
+
+        public virtual void RouteTo(Coordinate destination)
+        {
+            MoveTo = destination;
+            Following = null;
+        }
+
+        public virtual void Follow(GameEntity followed)
+        {
+            Following = followed;
         }
 
         public static CollisionResult CheckCollision(GameEntity A, GameEntity B)
@@ -175,6 +193,10 @@ namespace rtsx.src.state
                     var middleX = leftEntity.MovementVector.X /
                         (leftEntity.MovementVector.X + rightEntity.MovementVector.X);
 
+                    if (Double.IsNaN(middleX)) { middleX = 0.5; }
+                    if (middleX > 1) { middleX = 1; }
+                    if (middleX < 0) { middleX = 0; }
+
                     var leftNewX = leftEntity.X + gapX * middleX;
                     var rightNewX = rightEntity.X - gapX + gapX * middleX;
 
@@ -192,6 +214,10 @@ namespace rtsx.src.state
                     // the percentage of the gap covered by the top entity
                     var middleY = topEntity.MovementVector.Y /
                         (topEntity.MovementVector.Y + bottomEntity.MovementVector.Y);
+
+                    if (Double.IsNaN(middleY)) { middleY = 0.5; }
+                    if (middleY > 1) { middleY = 1; }
+                    if (middleY < 0) { middleY = 0; }
 
                     var topNewY = topEntity.Y + gapY * middleY;
                     var bottomNewY = bottomEntity.Y - gapY + gapY * middleY;

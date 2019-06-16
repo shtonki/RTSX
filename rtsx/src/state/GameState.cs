@@ -79,7 +79,7 @@ namespace rtsx.src.state
 
             foreach (var u in Units)
             {
-                if (u.Attributes.CurrentHealth.Value <= 0)
+                if (u.Attributes.CurrentHealth <= 0)
                 {
                     remove.Add(u);
                 }
@@ -170,15 +170,21 @@ namespace rtsx.src.state
 
                 case GameActions.RouteTo:
                     {
-                        var paranoidCopy = MSI.Picked.ToList();
+                        var pickedCopy = MSI.Picked.ToList();
 
-                        if (paranoidCopy.Count == 0)
+                        if (pickedCopy.Count == 0)
                         {
-                            RouteTo(MouseEntity.Location);
+                            foreach (var e in Controlled)
+                            {
+                                e.RouteTo(MouseEntity.Location);
+                            }
                         }
-                        else if (paranoidCopy.Count == 1)
+                        else if (pickedCopy.Count == 1)
                         {
-                            Follow(paranoidCopy[0]);
+                            foreach (var e in Controlled)
+                            {
+                                e.Follow(pickedCopy[0]);
+                            }
                         }
                         else
                         {
@@ -204,23 +210,6 @@ namespace rtsx.src.state
             {
                 v.Selected = true;
                 Selected.Add(v);
-            }
-        }
-
-        private void RouteTo(Coordinate destination)
-        {
-            foreach (var v in Controlled)
-            {
-                v.Following = null;
-                v.MoveTo = destination;
-            }
-        }
-
-        private void Follow(GameEntity followed)
-        {
-            foreach (var v in Controlled)
-            {
-                v.Following = followed;
             }
         }
     }

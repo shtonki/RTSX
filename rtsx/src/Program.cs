@@ -19,12 +19,13 @@ namespace rtsx
             var fixtureOwner = new Player(false, Color.Black);
             GameEntity ge;
 
-            ge = new DummyUnit(hero);
-            ge.Location = new Coordinate(0.5, 0.5);
-            gs.AddEntity(ge);
+            var heroUnit = new DummyUnit(hero);
+            heroUnit.Location = new Coordinate(0.5, 0.5);
+            gs.AddEntity(heroUnit);
 
             ge = new DummyUnit(villain);
             ge.MoveSpeed = 0.002;
+            ge.Following = heroUnit;
             gs.AddEntity(ge);
 
             ge = new Fixture(Fixtures.Tree, EntitySize.Medium, fixtureOwner);
