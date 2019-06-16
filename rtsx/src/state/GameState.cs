@@ -106,6 +106,9 @@ namespace rtsx.src.state
 
         private void SelectEntities(IEnumerable<GameEntity> entities)
         {
+            // to avoid them pulling the rug out from under us
+            var entitiesCopy = entities.ToList();
+            
             foreach (var v in Selected)
             {
                 v.BrushColour = Color.White;
@@ -113,7 +116,7 @@ namespace rtsx.src.state
 
             Selected.Clear();
 
-            foreach (var v in entities)
+            foreach (var v in entitiesCopy)
             {
                 v.BrushColour = Color.Green;
                 Selected.Add(v);

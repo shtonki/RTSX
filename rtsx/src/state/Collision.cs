@@ -17,13 +17,22 @@ namespace rtsx.src.state
         public GameEntity A { get; }
         public GameEntity B { get; }
 
-        public CollisionResult(bool collisionOccured, GameEntity a, GameEntity b)
+        public Coordinate NewLocationA { get; }
+        public Coordinate NewLocationB { get; }
+
+        public CollisionResult(bool collisionOccured, GameEntity a, GameEntity b, Coordinate newLocationA, Coordinate newLocationB)
         {
             CollisionOccured = collisionOccured;
             A = a;
             B = b;
+            NewLocationA = newLocationA;
+            NewLocationB = newLocationB;
         }
-        
+
+        public CollisionResult(bool collisionOccured, GameEntity a, GameEntity b) : 
+            this(collisionOccured, a, b, null, null)
+        {
+        }
     }
 
     /// <summary>

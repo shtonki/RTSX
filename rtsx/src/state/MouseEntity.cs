@@ -33,7 +33,7 @@ namespace rtsx.src.state
 
         public MouseEntity() : base(new Coordinate(MouseSize, MouseSize))
         {
-            
+            Collidable = false;
         }
 
         public override void Draw(Drawer drawer)
@@ -41,7 +41,7 @@ namespace rtsx.src.state
             // todo
         }
 
-        protected override void Move()
+        protected override Coordinate DetermineMovement()
         {
             var picked = Current;
             // entered/left work backwards from what my brain says but i can't figure
@@ -57,7 +57,7 @@ namespace rtsx.src.state
             Current = swap;
             Current.Clear();
 
-            Location = GUI.Window.MousePosition;
+            return GUI.Window.MousePosition - Location;
         }
 
         public override void HandleCollision(CollisionInfo collisionInfo)

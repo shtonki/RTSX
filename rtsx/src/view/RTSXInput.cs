@@ -83,9 +83,8 @@ namespace rtsx.src.view
 
         public override bool Equals(RTSXInput other)
         {
-            if (other is MouseInput)
+            if (other is MouseInput v)
             {
-                var v = (MouseInput)other;
                 return
                     v.Button == Button &&
                     v.Direction == Direction;

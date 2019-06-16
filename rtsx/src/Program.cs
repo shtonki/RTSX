@@ -15,6 +15,7 @@ namespace rtsx
 
             var ge = new GameEntity(new Coordinate(0.1, 0.1));
             ge.MoveTo = new Coordinate(-0.5, -0.3);
+            ge.Location = new Coordinate(0.5, 0.5);
             gs.AddEntity(ge);
 
             ge = new GameEntity(new Coordinate(0.1, 0.1));

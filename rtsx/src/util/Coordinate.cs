@@ -4,6 +4,8 @@ namespace rtsx.src.util
 {
     class Coordinate
     {
+        public static Coordinate ZeroVector => new Coordinate(0, 0);
+
         public double X { get; }
         public double Y { get; }
 
