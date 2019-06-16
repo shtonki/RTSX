@@ -11,6 +11,7 @@ namespace rtsx.src.state
     {
         private List<GameEntity> EntityList { get; } = new List<GameEntity>();
         public IEnumerable<GameEntity> Entities => EntityList;
+        public IEnumerable<Unit> Units => EntityList.Where(e => e is Unit).Cast<Unit>();
         private List<GameEntity> Selected = new List<GameEntity>();
         private IEnumerable<GameEntity> Controlled => Selected.Where(s => s.Controllable);
 
@@ -68,6 +69,26 @@ namespace rtsx.src.state
             HandleSelector();
 
             DetectCollisions();
+
+            CallInTheUndertaker();
+        }
+
+        private void CallInTheUndertaker()
+        {
+            List<GameEntity> remove = new List<GameEntity>();
+
+            foreach (var u in Units)
+            {
+                if (u.Attributes.CurrentHealth.Value <= 0)
+                {
+                    remove.Add(u);
+                }
+            }
+
+            foreach (var r in remove)
+            {
+                RemoveEntity(r);
+            }
         }
 
         private void DetectCollisions()

@@ -9,14 +9,16 @@ using System.Threading.Tasks;
 
 namespace rtsx.src.state.gameEntities
 {
-    public enum UnitSize { Medium, };
-
-
     abstract class Unit : GameEntity
     {
+        private const double MoveSpeedMultiplier = 0.001;
+
         public Player Owner { get; }
 
-        public Unit(UnitSize size, Player owner) : base(CalculateSize(size))
+        public Attributes Attributes { get; protected set; }
+
+
+        public Unit(EntitySize size, Player owner) : base(size)
         {
             Owner = owner;
             Collidable = true;
@@ -28,35 +30,51 @@ namespace rtsx.src.state.gameEntities
             var sizeHalved = Size * 0.5;
             drawer.DrawRectangle(Location - sizeHalved, Location + sizeHalved, Selected ? Color.Green : Color.White, 3);
 
-            var backSize = sizeHalved * 0.7;
-            drawer.FillRectangle(Location - backSize, Location + backSize, Owner.PlayerColour);
+            if (Attributes.MaxHealth != null)
+            {
+                var healthPercentage = Attributes.CurrentHealth.Value / Attributes.MaxHealth.Value;
+                var backSize = sizeHalved * healthPercentage;
+                drawer.FillRectangle(Location - backSize, Location + backSize, Owner.PlayerColour);
+            }
 
             base.Draw(drawer);
         }
 
-        private static Coordinate CalculateSize(UnitSize size)
+        public override void Step()
         {
-            int multiplier;
-
-            switch (size)
-            {
-                case UnitSize.Medium:
-                    {
-                        multiplier = 4;
-                    } break;
-
-                default: throw new RTSXException();
-            }
-
-            return new Coordinate(GridSize * multiplier, GridSize * multiplier);
+            Attributes.CurrentHealth.BaseValue -= 0.1;
+            // ugly hack to allow for MoveSpeed to be in GameEntity and have another
+            // variable in Attributes called MovementSpeed
+            MoveSpeed = MoveSpeedMultiplier * Attributes.MovementSpeed.Value;
+            base.Step();
         }
     }
 
     class DummyUnit : Unit
     {
-        public DummyUnit(Player owner) : base(UnitSize.Medium, owner)
+        public DummyUnit(Player owner) : base(EntitySize.Medium, owner)
         {
+            Attributes = new Attributes(100, 10);
+
             Sprite = Sprites.Warrior;
         }
+    }
+
+    public enum Fixtures { Tree,}
+
+    class Fixture : GameEntity
+    {
+        public Fixture(Fixtures fixture, EntitySize size, Player owner) : base(size)
+        {
+            switch (fixture)
+            {
+                case Fixtures.Tree:
+                    {
+                        Sprite = Sprites.Tree;
+                        Collidable = true;
+                    } break;
+            }
+        }
+
     }
 }

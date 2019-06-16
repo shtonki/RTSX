@@ -5,6 +5,8 @@ using System.Drawing;
 
 namespace rtsx.src.state
 {
+    public enum EntitySize { Medium, };
+
     abstract class GameEntity : Drawable, Loggable
     {
         public const double GridSize = 0.025;
@@ -55,6 +57,11 @@ namespace rtsx.src.state
             BoundingBox = new BoundingBox(Size.Clone());
         }
 
+        public GameEntity(EntitySize size) : this(CalculateSize(size))
+        {
+
+        }
+
         public virtual void Draw(Drawer drawer)
         {
             var sizeHalved = Size * 0.5;
@@ -62,7 +69,7 @@ namespace rtsx.src.state
                 Location + sizeHalved, BrushColour);
         }
 
-        public void Step()
+        public virtual void Step()
         {
             MovementVector = DetermineMovement();
             Move();
@@ -206,6 +213,24 @@ namespace rtsx.src.state
                 return new CollisionResult(false, A, B);
             }
 
+        }
+
+        protected static Coordinate CalculateSize(EntitySize size)
+        {
+            int multiplier;
+
+            switch (size)
+            {
+                case EntitySize.Medium:
+                    {
+                        multiplier = 4;
+                    }
+                    break;
+
+                default: throw new RTSXException();
+            }
+
+            return new Coordinate(GridSize * multiplier, GridSize * multiplier);
         }
 
         public string Log()

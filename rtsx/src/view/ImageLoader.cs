@@ -22,6 +22,8 @@ namespace rtsx.src.view
         Hellspawn,
 
         Warrior,
+
+        Tree,
     }
 
     static class ImageLoader
@@ -36,6 +38,7 @@ namespace rtsx.src.view
 
             ImageDictionary[Sprites.Hellspawn] = Properties.Resources.hellspawn;
             ImageDictionary[Sprites.Warrior] = Properties.Resources.soldier;
+            ImageDictionary[Sprites.Tree] = Properties.Resources.tree;
         }
 
         public static TextureBinding GetBinding(Sprites sprite)

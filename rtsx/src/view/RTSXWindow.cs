@@ -13,8 +13,8 @@ namespace rtsx.src.view
 {
     class RTSXWindow : GameWindow
     {
-        private const int WindowHeight = 400;
-        private const int WindowWidth = 400;
+        private const int WindowHeight = 800;
+        private const int WindowWidth = 800;
 
         public Coordinate MousePosition { get; private set; } = new Coordinate(0, 0);
 
