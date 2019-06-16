@@ -146,7 +146,9 @@ namespace rtsx.src.state
                 var yPrevOverlap = yOverlap - A.MovementVector.Y - B.MovementVector.Y;
                 var xOverlapDiff = xOverlap - xPrevOverlap;
                 var yOverlapDiff = yOverlap - yPrevOverlap;
-                var xWiseCollision = Math.Abs(xOverlapDiff) > Math.Abs(yOverlapDiff);
+                var xOverlapDiffPercentage = xOverlapDiff / xOverlap;
+                var yOverlapDiffPercentage = yOverlapDiff / yOverlap;
+                var xWiseCollision = Math.Abs(xOverlapDiffPercentage) > Math.Abs(yOverlapDiffPercentage);
                 double ANewX;
                 double ANewY;
                 double BNewX;
