@@ -58,7 +58,6 @@ namespace rtsx.src.state
         public virtual void Draw(Drawer drawer)
         {
             var sizeHalved = Size * 0.5;
-            //drawer.FillRectangle(Location - sizeHalved, Location + sizeHalved, Color.Fuchsia);
             drawer.drawTextureR(GUI.A, Location - sizeHalved, 
                 Location + sizeHalved, BrushColour);
         }
@@ -106,7 +105,7 @@ namespace rtsx.src.state
         public virtual void HandleCollision(CollisionInfo collisionInfo)
         {
             var collisionResult = collisionInfo.CollisionResult;
-            if (collisionResult.CollisionOccured && collisionResult.A.Collidable && collisionResult.B.Collidable)
+            if (collisionResult.CollisionOccured)
             {
                 var myNewLocation = collisionInfo.Self == collisionResult.A ? 
                     collisionResult.NewLocationA : collisionResult.NewLocationB;
@@ -132,6 +131,11 @@ namespace rtsx.src.state
             // if we have detected a collision
             if (xOverlap > 0 && yOverlap > 0)
             {
+                if (!A.Collidable || !B.Collidable)
+                {
+                    return new CollisionResult(true, A, B);
+                }
+
                 var previousCoordinatesA = A.Location - A.MovementVector;
                 var previousCoordinatesB = B.Location - B.MovementVector;
 

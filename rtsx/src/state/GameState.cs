@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Timers;
 using System.Linq;
+using rtsx.src.state.gameEntities;
 
 namespace rtsx.src.state
 {
@@ -17,6 +18,9 @@ namespace rtsx.src.state
 
         private Timer StepTimer;
         private const double StepsPerSecond = 100;
+
+        private SelectorStart SelectorStart;
+        private SelectorEnd SelectorEnd;
 
         public GameState()
         {
@@ -45,12 +49,22 @@ namespace rtsx.src.state
             EntityList.Add(gameEntity);
         }
 
+        public void RemoveEntity(GameEntity gameEntity)
+        {
+            if (!EntityList.Remove(gameEntity))
+            {
+                Logging.Log("Tried to remove GameEntity from GameState it is not present in");
+            }
+        }
+
         private void Step()
         {
             foreach (var entity in Entities)
             {
                 entity.Step();
             }
+
+            HandleSelector();
 
             DetectCollisions();
         }
@@ -75,13 +89,61 @@ namespace rtsx.src.state
             }
         }
 
+        private IEnumerable<GameEntity> DetectCollisions(GameEntity detector)
+        {
+            List<GameEntity> collided = new List<GameEntity>();
+
+            foreach (var entity in EntityList)
+            {
+                if (entity == detector) { continue; }
+
+                if (GameEntity.CheckCollision(detector, entity).CollisionOccured)
+                {
+                    collided.Add(entity);
+                }
+            }
+
+            return collided;
+        }
+
+        private void HandleSelector()
+        {
+            if (SelectorEnd != null)
+            {
+                if (SelectorStart == null) { throw new RTSXException(); }
+
+                SelectorEnd.Location = MouseEntity.Location;
+            }
+        }
+
         public void HandleAction(GameAction action)
         {
             switch (action.Action)
             {
+                case GameActions.SelectStart:
+                    {
+                        if (SelectorStart != null || SelectorEnd != null)
+                        { throw new RTSXException(); }
+
+                        SelectorStart = new SelectorStart();
+                        SelectorStart.Location = MouseEntity.Location;
+                        AddEntity(SelectorStart);
+
+                        SelectorEnd = new SelectorEnd(SelectorStart);
+                        SelectorEnd.Location = MouseEntity.Location;
+                        AddEntity(SelectorEnd);
+                    } break;
+
                 case GameActions.SelectEnd:
                     {
-                        SelectEntities(MouseEntity.MouseStateInfo.Picked);
+                        var selector = new SelectorEntity(SelectorStart, SelectorEnd);
+
+                        SelectEntities(DetectCollisions(selector));
+
+                        RemoveEntity(SelectorStart);
+                        SelectorStart = null;
+                        RemoveEntity(SelectorEnd);
+                        SelectorEnd = null;
                     } break;
 
                 case GameActions.RouteTo:

@@ -30,7 +30,7 @@ namespace rtsx.src.state
         }
 
         public CollisionResult(bool collisionOccured, GameEntity a, GameEntity b) : 
-            this(collisionOccured, a, b, null, null)
+            this(collisionOccured, a, b, a.Location, b.Location)
         {
         }
     }
