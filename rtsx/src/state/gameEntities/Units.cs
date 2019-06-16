@@ -11,14 +11,16 @@ namespace rtsx.src.state.gameEntities
 {
     public enum UnitSize { Medium, };
 
+
     abstract class Unit : GameEntity
     {
-        private Color BackgroundColour;
+        public Player Owner { get; }
 
-        public Unit(UnitSize size, Color backgroundColour) : base(CalculateSize(size))
+        public Unit(UnitSize size, Player owner) : base(CalculateSize(size))
         {
-            BackgroundColour = backgroundColour;
+            Owner = owner;
             Collidable = true;
+            Controllable = owner.Controlled;
         }
 
         public override void Draw(Drawer drawer)
@@ -27,10 +29,11 @@ namespace rtsx.src.state.gameEntities
             drawer.DrawRectangle(Location - sizeHalved, Location + sizeHalved, Selected ? Color.Green : Color.White, 3);
 
             var backSize = sizeHalved * 0.7;
-            drawer.FillRectangle(Location - backSize, Location + backSize, BackgroundColour);
+            drawer.FillRectangle(Location - backSize, Location + backSize, Owner.PlayerColour);
 
             base.Draw(drawer);
         }
+
         private static Coordinate CalculateSize(UnitSize size)
         {
             int multiplier;
@@ -51,7 +54,7 @@ namespace rtsx.src.state.gameEntities
 
     class DummyUnit : Unit
     {
-        public DummyUnit() : base(UnitSize.Medium, Color.Pink)
+        public DummyUnit(Player owner) : base(UnitSize.Medium, owner)
         {
             Sprite = Sprites.Warrior;
         }

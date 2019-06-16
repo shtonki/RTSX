@@ -44,6 +44,7 @@ namespace rtsx.src.state
         public bool Collidable { get; protected set; }
 
         public bool Selected { get; set; }
+        public bool Controllable { get; protected set; }
 
         public Sprites Sprite = Sprites.Hellspawn;
         public Color BrushColour { get; private set; } = Color.White;

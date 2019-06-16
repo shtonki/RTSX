@@ -12,6 +12,7 @@ namespace rtsx.src.state
         private List<GameEntity> EntityList { get; } = new List<GameEntity>();
         public IEnumerable<GameEntity> Entities => EntityList;
         private List<GameEntity> Selected = new List<GameEntity>();
+        private IEnumerable<GameEntity> Controlled => Selected.Where(s => s.Controllable);
 
         public MouseEntity MouseEntity { get; } = new MouseEntity();
         private MouseStateInfo MSI => MouseEntity.MouseStateInfo;
@@ -187,7 +188,7 @@ namespace rtsx.src.state
 
         private void RouteTo(Coordinate destination)
         {
-            foreach (var v in Selected)
+            foreach (var v in Controlled)
             {
                 v.Following = null;
                 v.MoveTo = destination;
@@ -196,7 +197,7 @@ namespace rtsx.src.state
 
         private void Follow(GameEntity followed)
         {
-            foreach (var v in Selected)
+            foreach (var v in Controlled)
             {
                 v.Following = followed;
             }

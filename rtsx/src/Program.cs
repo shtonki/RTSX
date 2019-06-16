@@ -3,6 +3,7 @@ using rtsx.src.view;
 using rtsx.src.state;
 using rtsx.src.util;
 using rtsx.src.state.gameEntities;
+using System.Drawing;
 
 namespace rtsx
 {
@@ -14,18 +15,20 @@ namespace rtsx
 
             GameState gs = new GameState();
 
-            var ge = new DummyUnit();
+            var hero = new Player(true, Color.Green);
+            var villain = new Player(false, Color.Red);
+
+            var ge = new DummyUnit(hero);
             ge.Location = new Coordinate(0.5, 0.5);
             gs.AddEntity(ge);
 
-            ge = new DummyUnit();
+            ge = new DummyUnit(villain);
             ge.MoveSpeed = 0.002;
             gs.AddEntity(ge);
 
             Scene scene = new GameScene(gs);
 
             GUI.Window.Scene = scene;
-
         }
     }
 }
