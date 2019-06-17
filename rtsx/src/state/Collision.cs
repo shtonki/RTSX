@@ -41,13 +41,16 @@ namespace rtsx.src.state
     /// </summary>
     class CollisionInfo
     {
+        public GameState GameState { get; }
+
         public CollisionResult CollisionResult { get; }
 
         public GameEntity Self { get; }
         public GameEntity Other { get; }
 
-        public CollisionInfo(CollisionResult collisionResult, GameEntity self)
+        public CollisionInfo(GameState gameState, CollisionResult collisionResult, GameEntity self)
         {
+            GameState = gameState;
             CollisionResult = collisionResult;
 
             Self = self;

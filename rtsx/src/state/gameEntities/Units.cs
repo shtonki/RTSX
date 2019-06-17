@@ -19,17 +19,23 @@ namespace rtsx.src.state.gameEntities
 
         public Player Owner { get; }
 
-        public Statii Status { get; protected set; } = Statii.Normal;
+        public Statii Status { get; set; } = Statii.Normal;
         public Attributes Attributes { get; protected set; }
 
         public bool IsAlive => Attributes.CurrentHealth > 0;
 
+        protected ProjectileBlueprint AttackProjectile;
+        public Unit Attacking { get; set; }
         private double AttackCounter;
         private bool InBackswing;
-        private Unit Attacking;
         public bool CanBeAttacked => IsAlive;
         public bool CanAttack(GameEntity other)
         {
+            if (Status != Statii.Normal)
+            {
+                return false;
+            }
+
             if (!(other is Unit))
             { return false; }
 
@@ -73,6 +79,12 @@ namespace rtsx.src.state.gameEntities
 
         public override void Step(GameState gameState)
         {
+            if (Attributes.CurrentHealth < 0)
+            {
+                gameState.RaiseGameEvent(new DestroyEvent(this));
+                return;
+            }
+
             UpdateAttributes();
 
             HandleAttacking(gameState);
@@ -100,8 +112,7 @@ namespace rtsx.src.state.gameEntities
                 CanAttack(Following) &&
                 DistanceTo(Following) < Attributes.AttackRange)
             {
-                Status = Statii.Attacking;
-                Attacking = Following as Unit;
+                gameState.RaiseGameEvent(new BeginAttackEvent(this, Following as Unit));
             }
 
             if (Status == Statii.Attacking)
@@ -112,7 +123,17 @@ namespace rtsx.src.state.gameEntities
                 if (!InBackswing && AttackCounter > BaseAttackTime * DamagePoint)
                 {
                     InBackswing = true;
-                    Attack(Attacking, gameState);
+                    if (AttackProjectile != null)
+                    {
+
+                        var projectile = AttackProjectile.Launch(this, Attacking, Attributes.AttackDamage);
+                        gameState.RaiseGameEvent(new LaunchProjectileEvent(
+                            this, Attacking, projectile));
+                    }
+                    else
+                    {
+                        gameState.RaiseGameEvent(new DamageEvent(this, Attacking, Attributes.AttackDamage));
+                    }
                 }
 
                 // check for end of backswing
@@ -151,11 +172,6 @@ namespace rtsx.src.state.gameEntities
             }
             base.RouteTo(destination);
         }
-
-        public void Attack(Unit other, GameState gameState)
-        {
-            other.Attributes.CurrentHealth.Modify(-Attributes.AttackDamage);
-        }
     }
 
     class Warrior : Unit
@@ -173,6 +189,7 @@ namespace rtsx.src.state.gameEntities
         public Ranger(Player owner) : base(EntitySize.Medium, owner)
         {
             Attributes = new Attributes(70, 15, 0.45, 8, 1.5);
+            AttackProjectile = new ProjectileBlueprint(0.01);
 
             Sprite = Sprites.Ranger;
         }

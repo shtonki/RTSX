@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Timers;
 using System.Linq;
 using rtsx.src.state.gameEntities;
+using static rtsx.src.state.gameEntities.Unit;
 
 namespace rtsx.src.state
 {
@@ -23,6 +24,8 @@ namespace rtsx.src.state
 
         private SelectorStart SelectorStart;
         private SelectorEnd SelectorEnd;
+
+        private Queue<GameEvent> PendingEvents = new Queue<GameEvent>();
 
         public GameState()
         {
@@ -59,6 +62,70 @@ namespace rtsx.src.state
             }
         }
 
+        public void RaiseGameEvent(GameEvent gameEvent)
+        {
+            PendingEvents.Enqueue(gameEvent);
+        }
+
+        public void HandleAction(GameAction action)
+        {
+            switch (action.Action)
+            {
+                case GameActions.SelectStart:
+                    {
+                        if (SelectorStart != null || SelectorEnd != null)
+                        { throw new RTSXException(); }
+
+                        SelectorStart = new SelectorStart();
+                        SelectorStart.Location = MouseEntity.Location;
+                        AddEntity(SelectorStart);
+
+                        SelectorEnd = new SelectorEnd(SelectorStart);
+                        SelectorEnd.Location = MouseEntity.Location;
+                        AddEntity(SelectorEnd);
+                    }
+                    break;
+
+                case GameActions.SelectEnd:
+                    {
+                        var selector = new SelectorEntity(SelectorStart, SelectorEnd);
+
+                        SelectEntities(DetectCollisions(selector));
+
+                        RemoveEntity(SelectorStart);
+                        SelectorStart = null;
+                        RemoveEntity(SelectorEnd);
+                        SelectorEnd = null;
+                    }
+                    break;
+
+                case GameActions.RouteTo:
+                    {
+                        var pickedCopy = MSI.Picked.ToList();
+
+                        if (pickedCopy.Count == 0)
+                        {
+                            foreach (var e in Controlled)
+                            {
+                                e.RouteTo(MouseEntity.Location);
+                            }
+                        }
+                        else if (pickedCopy.Count == 1)
+                        {
+                            foreach (var e in Controlled)
+                            {
+                                e.Follow(pickedCopy[0]);
+                            }
+                        }
+                        else
+                        {
+                            Logging.Log("Picked multiple objects and rather than shit the bed with an exception I'm logging it.");
+                        }
+                    }
+                    break;
+            }
+        }
+
         private void Step()
         {
             foreach (var entity in Entities)
@@ -66,9 +133,69 @@ namespace rtsx.src.state
                 entity.Step(this);
             }
 
+            HandlePendingEvents();
+
             HandleSelector();
 
             DetectCollisions();
+        }
+
+        private void HandlePendingEvents()
+        {
+            while (PendingEvents.Count > 0)
+            {
+                HandleEvent(PendingEvents.Dequeue());
+            }
+        }
+
+        private void HandleEvent(GameEvent gameEvent)
+        {
+            bool log = false;
+
+            if (gameEvent is MoveEvent)
+            {
+                var moveEvent = gameEvent as MoveEvent;
+
+                moveEvent.Mover.Move(moveEvent.MovementVector);
+            }
+
+            else if (gameEvent is BeginAttackEvent)
+            {
+                var beginAttackEvent = gameEvent as BeginAttackEvent;
+
+                beginAttackEvent.Attacker.Status = Statii.Attacking;
+                beginAttackEvent.Attacker.Attacking = beginAttackEvent.Attacked;
+            }
+
+            else if (gameEvent is LaunchProjectileEvent)
+            {
+                var launchProjectileEvent = gameEvent as LaunchProjectileEvent;
+                var projectile = launchProjectileEvent.Projectile;
+                AddEntity(projectile);
+                projectile.Location = launchProjectileEvent.Launcher.Location;
+            }
+
+            else if (gameEvent is DamageEvent)
+            {
+                var damageEvent = gameEvent as DamageEvent;
+                damageEvent.Target.Attributes.CurrentHealth.Modify(-damageEvent.Amount);
+            }
+
+            else if (gameEvent is DestroyEvent)
+            {
+                var destroyEvent = gameEvent as DestroyEvent;
+                RemoveEntity(destroyEvent.Destroyed);
+            }
+
+            else
+            {
+                throw new RTSXException();
+            }
+
+            if (log)
+            {
+                Logging.Log(gameEvent);
+            }
         }
 
         private void DetectCollisions()
@@ -86,8 +213,8 @@ namespace rtsx.src.state
 
                     if (collisionResult.CollisionOccured)
                     {
-                        collisions.Add(new CollisionInfo(collisionResult, entityI));
-                        collisions.Add(new CollisionInfo(collisionResult, entityJ));
+                        collisions.Add(new CollisionInfo(this, collisionResult, entityI));
+                        collisions.Add(new CollisionInfo(this, collisionResult, entityJ));
                     }
                 }
             }
@@ -125,61 +252,6 @@ namespace rtsx.src.state
             }
         }
 
-        public void HandleAction(GameAction action)
-        {
-            switch (action.Action)
-            {
-                case GameActions.SelectStart:
-                    {
-                        if (SelectorStart != null || SelectorEnd != null)
-                        { throw new RTSXException(); }
-
-                        SelectorStart = new SelectorStart();
-                        SelectorStart.Location = MouseEntity.Location;
-                        AddEntity(SelectorStart);
-
-                        SelectorEnd = new SelectorEnd(SelectorStart);
-                        SelectorEnd.Location = MouseEntity.Location;
-                        AddEntity(SelectorEnd);
-                    } break;
-
-                case GameActions.SelectEnd:
-                    {
-                        var selector = new SelectorEntity(SelectorStart, SelectorEnd);
-
-                        SelectEntities(DetectCollisions(selector));
-
-                        RemoveEntity(SelectorStart);
-                        SelectorStart = null;
-                        RemoveEntity(SelectorEnd);
-                        SelectorEnd = null;
-                    } break;
-
-                case GameActions.RouteTo:
-                    {
-                        var pickedCopy = MSI.Picked.ToList();
-
-                        if (pickedCopy.Count == 0)
-                        {
-                            foreach (var e in Controlled)
-                            {
-                                e.RouteTo(MouseEntity.Location);
-                            }
-                        }
-                        else if (pickedCopy.Count == 1)
-                        {
-                            foreach (var e in Controlled)
-                            {
-                                e.Follow(pickedCopy[0]);
-                            }
-                        }
-                        else
-                        {
-                            throw new RTSXException();
-                        }
-                    } break;
-            }
-        }
 
         private void SelectEntities(IEnumerable<GameEntity> entities)
         {

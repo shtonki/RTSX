@@ -57,6 +57,7 @@
     <Compile Include="src\state\gameEntities\Projectile.cs" />
     <Compile Include="src\state\gameEntities\SelectorEntity.cs" />
     <Compile Include="src\state\gameEntities\Units.cs" />
+    <Compile Include="src\state\GameEvent.cs" />
     <Compile Include="src\state\Player.cs" />
     <Compile Include="src\util\RTSXException.cs" />
     <Compile Include="src\view\Drawable.cs" />

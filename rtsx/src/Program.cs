@@ -23,7 +23,7 @@ namespace rtsx
             heroUnit.Location = new Coordinate(0.5, 0.5);
             gs.AddEntity(heroUnit);
 
-            var villainUnit = new Warrior(hero);
+            var villainUnit = new Warrior(villain);
             villainUnit.MoveSpeed = 0.002;
             villainUnit.Following = heroUnit;
             gs.AddEntity(villainUnit);

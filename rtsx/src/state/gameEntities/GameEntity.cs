@@ -14,7 +14,7 @@ namespace rtsx.src.state
         public Coordinate Location { get; set; } = new Coordinate(0, 0);
         public double X => Location.X;
         public double Y => Location.Y;
-        public Coordinate Size { get; protected set; } = new Coordinate(0.1, 0.1);
+        public Coordinate Size { get; set; } = new Coordinate(0.1, 0.1);
 
         public double LeftBounds
         {
@@ -43,10 +43,10 @@ namespace rtsx.src.state
         public double MoveSpeed { get; set; } = 0.004;
 
         private BoundingBox BoundingBox { get; }
-        public bool Collidable { get; protected set; }
+        public bool Collidable { get; set; }
 
         public bool Selected { get; set; }
-        public bool Controllable { get; protected set; }
+        public bool Controllable { get; set; }
 
         public Sprites Sprite = Sprites.Hellspawn;
         public Color BrushColour { get; private set; } = Color.White;
@@ -68,6 +68,12 @@ namespace rtsx.src.state
             return distance - BoundingBox.Size.X / 2 - other.BoundingBox.Size.X / 2;
         }
 
+        public void Move(Coordinate movementVector)
+        {
+            MovementVector = movementVector;
+            Location += movementVector;
+        }
+
         public virtual void Draw(Drawer drawer)
         {
             var sizeHalved = Size * 0.5;
@@ -77,8 +83,7 @@ namespace rtsx.src.state
 
         public virtual void Step(GameState gameState)
         {
-            MovementVector = DetermineMovement();
-            Move();
+            gameState.RaiseGameEvent(new MoveEvent(this, DetermineMovement()));
         }
 
         protected virtual Coordinate DetermineMovement()
@@ -110,11 +115,6 @@ namespace rtsx.src.state
             }
         }
 
-        protected void Move()
-        {
-            Location += MovementVector;
-        }
-
         public virtual void HandleCollision(CollisionInfo collisionInfo)
         {
             var collisionResult = collisionInfo.CollisionResult;
@@ -123,7 +123,6 @@ namespace rtsx.src.state
                 var myNewLocation = collisionInfo.Self == collisionResult.A ? 
                     collisionResult.NewLocationA : collisionResult.NewLocationB;
                 Location = myNewLocation;
-                Logging.Log("Collision placed me at " + Location);
             }
         }
 
