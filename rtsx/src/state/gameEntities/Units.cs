@@ -71,7 +71,16 @@ namespace rtsx.src.state.gameEntities
             base.Draw(drawer);
         }
 
-        public override void Step()
+        public override void Step(GameState gameState)
+        {
+            UpdateAttributes();
+
+            HandleAttacking(gameState);
+
+            base.Step(gameState);
+        }
+
+        private void UpdateAttributes()
         {
             // ugly hack to allow for MoveSpeed to be in GameEntity and have another
             // variable in Attributes called MovementSpeed
@@ -82,14 +91,12 @@ namespace rtsx.src.state.gameEntities
             {
                 Attributes.CurrentHealth.SetTo(Attributes.MaxHealth);
             }
-
-            base.Step();
         }
 
-        protected override Coordinate DetermineMovement()
+        private void HandleAttacking(GameState gameState)
         {
             // if we want to attack and can attack we begin attacking
-            if (Following != null && 
+            if (Following != null &&
                 CanAttack(Following) &&
                 DistanceTo(Following) < Attributes.AttackRange)
             {
@@ -97,10 +104,6 @@ namespace rtsx.src.state.gameEntities
                 Attacking = Following as Unit;
             }
 
-            if (Status == Statii.Normal)
-            {
-                return base.DetermineMovement();
-            }
             if (Status == Statii.Attacking)
             {
                 AttackCounter += Attributes.AttackSpeed;
@@ -109,7 +112,7 @@ namespace rtsx.src.state.gameEntities
                 if (!InBackswing && AttackCounter > BaseAttackTime * DamagePoint)
                 {
                     InBackswing = true;
-                    Attacking.Attributes.CurrentHealth.Modify(-Attributes.AttackDamage);
+                    Attack(Attacking, gameState);
                 }
 
                 // check for end of backswing
@@ -120,11 +123,38 @@ namespace rtsx.src.state.gameEntities
                     Status = Statii.Normal;
                     AttackCounter = 0;
                 }
+            }
+        }
 
+        protected override Coordinate DetermineMovement()
+        {
+            if (Status == Statii.Normal)
+            {
+                return base.DetermineMovement();
+            }
+            if (Status == Statii.Attacking)
+            {
                 return Coordinate.ZeroVector;
             }
 
             throw new RTSXException();
+        }
+
+        public override void RouteTo(Coordinate destination)
+        {
+            if (AttackCounter > 0)
+            {
+                InBackswing = false;
+                Attacking = null;
+                Status = Statii.Normal;
+                AttackCounter = 0;
+            }
+            base.RouteTo(destination);
+        }
+
+        public void Attack(Unit other, GameState gameState)
+        {
+            other.Attributes.CurrentHealth.Modify(-Attributes.AttackDamage);
         }
     }
 

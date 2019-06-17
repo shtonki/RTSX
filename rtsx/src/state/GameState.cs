@@ -63,36 +63,18 @@ namespace rtsx.src.state
         {
             foreach (var entity in Entities)
             {
-                entity.Step();
+                entity.Step(this);
             }
 
             HandleSelector();
 
             DetectCollisions();
-
-            CallInTheUndertaker();
-        }
-
-        private void CallInTheUndertaker()
-        {
-            List<GameEntity> remove = new List<GameEntity>();
-
-            foreach (var u in Units)
-            {
-                if (u.Attributes.CurrentHealth <= 0)
-                {
-                    remove.Add(u);
-                }
-            }
-
-            foreach (var r in remove)
-            {
-                RemoveEntity(r);
-            }
         }
 
         private void DetectCollisions()
         {
+            List<CollisionInfo> collisions = new List<CollisionInfo>();
+
             for (int i = 0; i < EntityList.Count; i++)
             {
                 var entityI = EntityList[i];
@@ -104,10 +86,15 @@ namespace rtsx.src.state
 
                     if (collisionResult.CollisionOccured)
                     {
-                        entityI.HandleCollision(new CollisionInfo(collisionResult, entityI));
-                        entityJ.HandleCollision(new CollisionInfo(collisionResult, entityJ));
+                        collisions.Add(new CollisionInfo(collisionResult, entityI));
+                        collisions.Add(new CollisionInfo(collisionResult, entityJ));
                     }
                 }
+            }
+
+            foreach (var collision in collisions)
+            {
+                collision.Self.HandleCollision(collision);
             }
         }
 

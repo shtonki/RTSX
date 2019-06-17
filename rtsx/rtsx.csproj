@@ -54,6 +54,7 @@
     <Compile Include="src\state\Attributes.cs" />
     <Compile Include="src\state\Collision.cs" />
     <Compile Include="src\state\GameAction.cs" />
+    <Compile Include="src\state\gameEntities\Projectile.cs" />
     <Compile Include="src\state\gameEntities\SelectorEntity.cs" />
     <Compile Include="src\state\gameEntities\Units.cs" />
     <Compile Include="src\state\Player.cs" />

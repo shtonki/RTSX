@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace rtsx.src.state
 {
-    public enum EntitySize { Medium, };
+    public enum EntitySize { Tiny, Small, Medium, };
 
     abstract class GameEntity : Drawable, Loggable
     {
@@ -75,7 +75,7 @@ namespace rtsx.src.state
                 Location + sizeHalved, BrushColour);
         }
 
-        public virtual void Step()
+        public virtual void Step(GameState gameState)
         {
             MovementVector = DetermineMovement();
             Move();
@@ -250,6 +250,17 @@ namespace rtsx.src.state
                 case EntitySize.Medium:
                     {
                         multiplier = 4;
+                    }
+                    break;
+
+                case EntitySize.Small:
+                    {
+                        multiplier = 2;
+                    }
+                    break;
+                case EntitySize.Tiny:
+                    {
+                        multiplier = 1;
                     }
                     break;
 
