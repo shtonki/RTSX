@@ -27,7 +27,6 @@ namespace rtsx.src.state.gameEntities
         {
             var sizeHalved = Size / 2;
             drawer.FillRectangle(Location - sizeHalved, Location + sizeHalved, Color.AntiqueWhite);
-            //base.Draw(drawer);
         }
 
         public override void HandleCollision(CollisionInfo collisionInfo)

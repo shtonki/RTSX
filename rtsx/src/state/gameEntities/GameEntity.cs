@@ -38,7 +38,7 @@ namespace rtsx.src.state
         }
 
         public Coordinate MovementVector { get; protected set; }
-        public Coordinate MoveTo { get; set; }
+        public Coordinate Destination { get; set; }
         public GameEntity Following { get; set; }
         public double MoveSpeed { get; set; } = 0.004;
 
@@ -90,20 +90,20 @@ namespace rtsx.src.state
         {
             if (Following != null)
             {
-                MoveTo = Following.Location;
+                Destination = Following.Location;
             }
 
-            if (MoveTo == null)
+            if (Destination == null)
             {
                 return Coordinate.ZeroVector;
             }
 
-            var diff = MoveTo - Location;
+            var diff = Destination - Location;
             var angle = Math.Atan2(diff.Y, diff.X);
 
             if (diff.Abs < MoveSpeed)
             {
-                MoveTo = null;
+                Destination = null;
                 return diff;
             }
             else
@@ -128,7 +128,7 @@ namespace rtsx.src.state
 
         public virtual void RouteTo(Coordinate destination)
         {
-            MoveTo = destination;
+            Destination = destination;
             Following = null;
         }
 

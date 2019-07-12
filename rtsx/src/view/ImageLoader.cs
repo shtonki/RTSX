@@ -17,6 +17,11 @@ namespace rtsx.src.view
         }
     }
 
+    // To add a sprite to the game:
+    // 1 Add image in Resources.resx
+    // 2 Add element in Sprites
+    // 3 Bind image to Sprite in LoadTextures
+
     public enum Sprites
     {
         Hellspawn,
@@ -25,6 +30,8 @@ namespace rtsx.src.view
         Ranger,
 
         Tree,
+
+        Sanic,
     }
 
     static class ImageLoader
@@ -41,23 +48,18 @@ namespace rtsx.src.view
             ImageDictionary[Sprites.Warrior] = Properties.Resources.soldier;
             ImageDictionary[Sprites.Ranger] = Properties.Resources.bow;
             ImageDictionary[Sprites.Tree] = Properties.Resources.tree;
+            ImageDictionary[Sprites.Sanic] = Properties.Resources.sanic;
         }
 
         public static TextureBinding GetBinding(Sprites sprite)
         {
             if (!LoadedTextures.ContainsKey(sprite))
             {
-                LoadedTextures[sprite] = BindTexture(ImageDictionary[sprite]);
+                LoadedTextures[sprite] = 
+                    new TextureBinding(MakeTexture(ImageDictionary[sprite]));
             }
 
             return LoadedTextures[sprite];
-        }
-
-        private static TextureBinding BindTexture(Image image)
-        {
-            var glId = MakeTexture(image);
-
-            return new TextureBinding(glId);
         }
 
         private static int MakeTexture(Image image)
