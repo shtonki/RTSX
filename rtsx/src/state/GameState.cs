@@ -126,7 +126,7 @@ namespace rtsx.src.state
             }
         }
 
-        private void Step()
+        public void Step()
         {
             foreach (var entity in Entities)
             {
@@ -185,6 +185,11 @@ namespace rtsx.src.state
             {
                 var destroyEvent = gameEvent as DestroyEvent;
                 RemoveEntity(destroyEvent.Destroyed);
+            }
+
+            else if (gameEvent == null)
+            {
+                Logging.Log("No game events");
             }
 
             else

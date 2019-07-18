@@ -68,6 +68,13 @@ namespace rtsx.src.state
             return distance - BoundingBox.Size.X / 2 - other.BoundingBox.Size.X / 2;
         }
 
+        public double AngleToInRad(GameEntity other)
+        {
+            var diff = other.Location - Location;
+            var angle = Math.Atan2(diff.Y, diff.X);
+            return angle;
+        }
+
         public void Move(Coordinate movementVector)
         {
             MovementVector = movementVector;

@@ -4,6 +4,7 @@ using rtsx.src.state;
 using rtsx.src.util;
 using rtsx.src.state.gameEntities;
 using System.Drawing;
+using rtsx.src.robot;
 
 namespace rtsx
 {
@@ -13,6 +14,10 @@ namespace rtsx
         {
             GUI.Launch();
 
+
+            TestScenario.Test();
+
+            /*
             GameState gs = new GameState();
             var hero = new Player(true, Color.Green);
             var villain = new Player(false, Color.Red);
@@ -35,6 +40,7 @@ namespace rtsx
 
             Scene scene = new GameScene(gs);
             GUI.Window.Scene = scene;
+            */
         }
     }
 }
